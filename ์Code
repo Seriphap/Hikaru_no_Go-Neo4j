@@ -35,4 +35,17 @@ RETURN a.name AS Player1, b.name AS Player2, r.event AS Event, r.winner AS Winne
 MATCH (h:Hikaru {name: "Hikaru Shindo"})-[:PROGRESSES_TO]->(s:Stage)
 RETURN s.name AS Stage, s.description AS Description
 
+9. แสดงกราฟความสัมพันธ์ทั้งหมด
+MATCH (n)-[r]->(m)
+RETURN n, r, m
+
+10. โฟกัสเฉพาะตัวละคร
+MATCH (c:Character)-[r]->(other:Character)
+RETURN c, r, other
+
+11. โฟกัสเฉพาะฮิคารุ
+MATCH (h:Character {name: "Hikaru Shindo"})-[r]->(n)
+RETURN h, r, n
+
+
 
