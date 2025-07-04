@@ -47,5 +47,35 @@ RETURN c, r, other
 MATCH (h:Character {name: "Hikaru Shindo"})-[r]->(n)
 RETURN h, r, n
 
+12. Closeness Centrality
+CALL gds.graph.project(
+  'charGraph',
+  'Character',
+  {
+    ALL: {
+      type: '*',
+      orientation: 'NATURAL'
+    }
+  }
+);
+
+CALL gds.alpha.closeness.stream('charGraph')
+YIELD nodeId, centrality
+RETURN gds.util.asNode(nodeId).name AS name, centrality
+ORDER BY centrality DESC;
+
+13. Betweenness Centrality
+CALL gds.alpha.betweenness.stream('charGraph')
+YIELD nodeId, centrality
+RETURN gds.util.asNode(nodeId).name AS name, centrality
+ORDER BY centrality DESC;
+
+14. Eigenvector Centrality
+CALL gds.alpha.eigenvector.stream('charGraph')
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS name, score
+ORDER BY score DESC;
+
+
 
 
