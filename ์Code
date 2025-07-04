@@ -1,0 +1,21 @@
+1. นำเข้าตัวละคร (Nodes)
+LOAD CSV WITH HEADERS FROM 'https://github.com/Seriphap/Hikaru_no_Go-Neo4j/raw/refs/heads/main/nodes_characters.csv' AS row
+MERGE (:Character {id: row.id, name: row.name});
+
+2. นำเข้าความสัมพันธ์ระหว่างตัวละคร
+LOAD CSV WITH HEADERS FROM 'https://github.com/Seriphap/Hikaru_no_Go-Neo4j/raw/refs/heads/main/relationships.csv' AS row
+MATCH (a:Character {id: row.source}), (b:Character {id: row.target})
+CALL apoc.create.relationship(a, row.type, {}, b) YIELD rel
+RETURN rel;
+
+3. นำเข้าการแข่งขันโกะ
+LOAD CSV WITH HEADERS FROM 'https://github.com/Seriphap/Hikaru_no_Go-Neo4j/raw/refs/heads/main/matches.csv' AS row
+MATCH (p1:Character {id: row.player1}), (p2:Character {id: row.player2})
+MERGE (p1)-[:PLAYED_WITH {event: row.event, winner: row.winner}]->(p2);
+
+4. นำเข้าเส้นทางการเติบโตของฮิคารุ
+LOAD CSV WITH HEADERS FROM 'https://github.com/Seriphap/Hikaru_no_Go-Neo4j/raw/refs/heads/main/hikaru_growth.csv' AS row
+MERGE (h:Hikaru {name: "Hikaru Shindo"})
+MERGE (s:Stage {name: row.stage, description: row.description})
+MERGE (h)-[:PROGRESSES_TO]->(s);
+
